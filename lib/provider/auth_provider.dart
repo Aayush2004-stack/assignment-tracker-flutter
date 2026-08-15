@@ -1,6 +1,7 @@
 import 'package:assignment_tracker/model/user_model.dart';
 import 'package:assignment_tracker/services/auth_service.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class AuthProvider extends ChangeNotifier{
@@ -28,6 +29,8 @@ Future<bool> login({
   try{
     final response = await _authService.login(email, password);
     userToken = response.userToken;
+    final prefs= await SharedPreferences.getInstance(); // store the token in shared preferences
+    await prefs.setString('token', userToken!);
     return true;
   }
   catch(err){
