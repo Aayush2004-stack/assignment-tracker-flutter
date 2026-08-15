@@ -1,6 +1,5 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
 import 'package:assignment_tracker/custom/custom_text_form_field.dart';
-import 'package:assignment_tracker/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:assignment_tracker/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -50,12 +49,8 @@ class _LoginScreenState extends State<LoginScreen> {
           content: CustomText(text: auth.errorMessage ?? 'Login Failed'),
         ),
       );
+      return;
     }
-    Navigator.pushReplacement(
-      context,
-
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-    );
   }
 
   @override
