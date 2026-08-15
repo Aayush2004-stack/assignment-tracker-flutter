@@ -1,6 +1,6 @@
 import 'package:assignment_tracker/provider/auth_provider.dart';
-import 'package:assignment_tracker/screens/home_screen.dart';
 import 'package:assignment_tracker/screens/login_screen.dart';
+import 'package:assignment_tracker/screens/main_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,42 +12,34 @@ class AuthGate extends StatefulWidget {
 }
 
 class _AuthGateState extends State<AuthGate> {
-bool? isLoggedIn;
+  bool? isLoggedIn;
 
-@override
+  @override
   void initState() {
-
     super.initState();
     _checkAuth();
   }
 
-  Future<void> _checkAuth() async{
+  Future<void> _checkAuth() async {
     final auth = context.read<AuthProvider>();
     final result = await auth.isLoggedIn();
 
-    if(!mounted) return;
+    if (!mounted) return;
 
     setState(() {
-      isLoggedIn= result;
+      isLoggedIn = result;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoggedIn==null){
-      return  Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+    final auth = context.watch<AuthProvider>();
+    if (isLoggedIn == null) {
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
     }
-    if(isLoggedIn!){
-      return const HomeScreen();
-
-
-
+    if (auth.userToken == null) {
+      return const LoginScreen();
     }
-    return const LoginScreen();
-    
+    return const MainShell();
   }
 }
