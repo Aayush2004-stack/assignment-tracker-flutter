@@ -1,3 +1,4 @@
+import 'package:assignment_tracker/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class AssignmentTracker extends StatelessWidget {
@@ -5,6 +6,10 @@ class AssignmentTracker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp();
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Assignment Tracker',
+      home: LoginScreen()
+    );
   }
 }
