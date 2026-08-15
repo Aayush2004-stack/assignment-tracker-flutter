@@ -1,6 +1,7 @@
 import 'package:assignment_tracker/model/user_model.dart';
 import 'package:assignment_tracker/services/auth_service.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -43,6 +44,25 @@ Future<bool> login({
   }
 
 }
+Future<bool> isLoggedIn() async{
+  final prefs= await SharedPreferences.getInstance();
+  final token= prefs.getString('token');
+
+  if(token==null || token.isEmpty){
+    userToken = null;
+    return false;
+  }
+  else if(JwtDecoder.isExpired(token)){
+    await prefs.remove('token');
+    userToken=null;
+    return false;
+  }
+  else{
+    userToken = token;
+    return true;
+  }
+}
+
 void logout(){
   userToken=null;
   user=null;
