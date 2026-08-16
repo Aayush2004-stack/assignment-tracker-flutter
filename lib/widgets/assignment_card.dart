@@ -2,7 +2,15 @@ import 'package:assignment_tracker/custom/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class AssignmentCard extends StatelessWidget {
-  const AssignmentCard({super.key});
+  final String assignmentName;
+  final String moduleName;
+  final String dueDate;
+  const AssignmentCard({
+    super.key,
+    required this.assignmentName,
+    required this.moduleName,
+    required this.dueDate,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +27,17 @@ class AssignmentCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomText(text: "Assignment Name"),
+                CustomText(text: assignmentName),
                 Row(
                   children: [
                     Icon(Icons.calendar_month),
-                    CustomText(text: " Due Date", fontSize: 16),
+                    CustomText(text: dueDate, fontSize: 16),
                   ],
                 ),
               ],
             ),
             SizedBox(height: 10),
-            CustomText(text: "Module Name"),
+            CustomText(text: moduleName),
             SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
