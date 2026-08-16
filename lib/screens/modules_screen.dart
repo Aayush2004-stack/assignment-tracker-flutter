@@ -59,6 +59,7 @@ class _ModulesScreenState extends State<ModulesScreen> {
                           return ModuleCard(
                             moduleName: module.moduleName,
                             pendingAssignments: module.pendingAssignments,
+                            moduleId: module.moduleId,
                           );
                         },
                         separatorBuilder: (context, index) {
