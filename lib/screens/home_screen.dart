@@ -1,12 +1,31 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/provider/assignment_provider.dart';
+import 'package:assignment_tracker/widgets/assignment_card.dart';
 import 'package:assignment_tracker/widgets/assignment_summary_card.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      if (!mounted) return;
+      context.read<AssignmentProvider>().getUpcomingAssignments();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final provider = context.watch<AssignmentProvider>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -37,45 +56,29 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 15),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomText(text: "Assignment Name"),
-                          Row(
-                            children: [
-                              Icon(Icons.calendar_month),
-                              CustomText(text: " Due Date", fontSize: 16),
-                            ],
-                          ),
-                        ],
+              provider.isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : provider.upcomingAssignments.isEmpty
+                  ? Center(child: Text("No assignments available"))
+                  : Expanded(
+                      child: ListView.separated(
+                        itemCount: provider.upcomingAssignments.length,
+                        itemBuilder: (context, index) {
+                          final assignment =
+                              provider.upcomingAssignments[index];
+
+                          return AssignmentCard(
+                            assignmentName: assignment.title,
+                            moduleName: assignment.moduleName,
+                            dueDate: DateFormat(
+                              'dd MMM yyyy',
+                            ).format(assignment.deadline),
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 20),
                       ),
-                      SizedBox(height: 10),
-                      CustomText(text: "Module Name"),
-                      SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomText(text: "Progress"),
-                          CustomText(text: "68%"),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      LinearProgressIndicator(value: 0.68),
-                      SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
             ],
           ),
         ),
