@@ -61,6 +61,7 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                               provider.assignments[index];
                           return AssignmentCard(
                             assignmentName: assignment.title,
+                            assignmentId: assignment.assignmentId,
                             moduleName: assignment.moduleName,
                             dueDate: DateFormat(
                               'dd MMM yyyy',

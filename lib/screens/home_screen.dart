@@ -69,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           return AssignmentCard(
                             assignmentName: assignment.title,
+                            assignmentId: assignment.assignmentId,
                             moduleName: assignment.moduleName,
                             dueDate: DateFormat(
                               'dd MMM yyyy',

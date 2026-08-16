@@ -78,6 +78,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
                               provider.selectedDateAssignments[index];
                           return AssignmentCard(
                             assignmentName: assignment.title,
+                            assignmentId: assignment.assignmentId,
                             moduleName: assignment.moduleName,
                             dueDate: DateFormat(
                               'dd MMM yyyy',
