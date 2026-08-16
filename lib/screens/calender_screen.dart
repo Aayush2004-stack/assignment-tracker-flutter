@@ -1,7 +1,9 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/provider/assignment_provider.dart';
 import 'package:assignment_tracker/widgets/assignment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CalenderScreen extends StatefulWidget {
   const CalenderScreen({super.key});
@@ -11,6 +13,15 @@ class CalenderScreen extends StatefulWidget {
 }
 
 class _CalenderScreenState extends State<CalenderScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      if (!mounted) return;
+      context.read<AssignmentProvider>().getAssignmentsByDate(selectedDate);
+    });
+  }
+
   DateTime selectedDate = DateTime.now();
   List<DateTime> get weekDates {
     final daysFromSunday = selectedDate.weekday % 7;
@@ -45,12 +56,41 @@ class _CalenderScreenState extends State<CalenderScreen> {
               SizedBox(height: 20),
               _buildWeekCalendar(),
               SizedBox(height: 20),
-              CustomText(text: "Assignmnets for today"),
+              CustomText(
+                text: DateTime.now().day == selectedDate.day
+                    ? "Today's Assignments"
+                    : "Assignments on ${DateFormat('EEEE, d').format(selectedDate)}",
+              ),
 
               SizedBox(height: 20),
-              AssignmentCard(),
-              SizedBox(height: 20),
-              AssignmentCard(),
+              Consumer<AssignmentProvider>(
+                builder: (context, provider, _) {
+                  if (provider.isLoading) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (provider.selectedDateAssignments.isEmpty) {
+                    return Center(child: Text("No assignments available"));
+                  } else {
+                    return Expanded(
+                      child: ListView.separated(
+                        itemCount: provider.selectedDateAssignments.length,
+                        itemBuilder: (context, index) {
+                          final assignment =
+                              provider.selectedDateAssignments[index];
+                          return AssignmentCard(
+                            assignmentName: assignment.title,
+                            moduleName: assignment.moduleName,
+                            dueDate: DateFormat(
+                              'dd MMM yyyy',
+                            ).format(assignment.deadline),
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 10),
+                      ),
+                    );
+                  }
+                },
+              ),
             ],
           ),
         ),
@@ -91,6 +131,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
         setState(() {
           selectedDate = date;
         });
+        context.read<AssignmentProvider>().getAssignmentsByDate(selectedDate);
       },
 
       child: Container(
