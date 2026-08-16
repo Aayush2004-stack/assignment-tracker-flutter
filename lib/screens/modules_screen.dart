@@ -1,6 +1,8 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/provider/module_provider.dart';
 import 'package:assignment_tracker/widgets/module_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ModulesScreen extends StatefulWidget {
   const ModulesScreen({super.key});
@@ -11,7 +13,18 @@ class ModulesScreen extends StatefulWidget {
 
 class _ModulesScreenState extends State<ModulesScreen> {
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      if (!mounted) return;
+      context.read<ModuleProvider>().fetchModules();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ModuleProvider>();
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -34,11 +47,25 @@ class _ModulesScreenState extends State<ModulesScreen> {
                 ],
               ),
               SizedBox(height: 20),
-              ModuleCard(),
-              SizedBox(height: 20),
-              ModuleCard(),
-              SizedBox(height: 20),
-              ModuleCard(),
+              provider.isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : provider.modules.isEmpty
+                  ? Center(child: Text("No modules available"))
+                  : Expanded(
+                      child: ListView.separated(
+                        itemCount: provider.modules.length,
+                        itemBuilder: (context, index) {
+                          final module = provider.modules[index];
+                          return ModuleCard(
+                            moduleName: module.moduleName,
+                            pendingAssignments: module.pendingAssignments,
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return SizedBox(height: 10);
+                        },
+                      ),
+                    ),
             ],
           ),
         ),
