@@ -1,10 +1,20 @@
 class UserModel {
   final String fullName;
+  final String email;
+  final String profileImg;
 
-  UserModel({required this.fullName});
+  UserModel({
+    required this.fullName,
+    required this.email,
+    required this.profileImg,
+  });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(fullName: json["full_name"]);
+    return UserModel(
+      fullName: json["full_name"],
+      email: json["email"],
+      profileImg: json["profile_image"],
+    );
   }
 }
 
