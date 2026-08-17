@@ -1,5 +1,4 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
-import 'package:assignment_tracker/model/module_model.dart';
 import 'package:assignment_tracker/provider/assignment_provider.dart';
 import 'package:assignment_tracker/provider/module_provider.dart';
 import 'package:assignment_tracker/widgets/assignment_card.dart';

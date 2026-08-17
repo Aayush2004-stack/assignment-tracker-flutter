@@ -19,8 +19,13 @@ class AssignmentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AssignmentDetailsScreen(assignmentId: assignmentId)));
-       
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                AssignmentDetailsScreen(assignmentId: assignmentId),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(

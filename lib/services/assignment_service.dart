@@ -51,6 +51,35 @@ class AssignmentService {
     }
   }
 
+  Future<void> updateAssignment(
+    int assignmentId,
+    String title,
+    String details,
+    String givenDate,
+    String dueDate,
+    int moduleId,
+    String token,
+  ) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/$assignmentId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode({
+        'title': title,
+        'details': details,
+        'givenDate': givenDate,
+        'dueDate': dueDate,
+        'moduleId': moduleId,
+      }),
+    );
+
+    if (response.statusCode != 201) {
+      throw Exception('Failed to create assignment');
+    }
+  }
+
   Future<List<AssignmentModel>> getAssignments(String token) async {
     final response = await http.get(
       Uri.parse(baseUrl),
