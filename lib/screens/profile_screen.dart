@@ -3,6 +3,7 @@ import 'package:assignment_tracker/custom/custom_text.dart';
 import 'package:assignment_tracker/provider/auth_provider.dart';
 import 'package:assignment_tracker/provider/profile_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -13,6 +14,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final ImagePicker _imagePicker = ImagePicker();
+
   @override
   void initState() {
     super.initState();
@@ -21,6 +24,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
         context.read<ProfileProvider>().fetchProfile();
       }
     });
+  }
+
+  Future<void> _changePhoto() async {
+    final image = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+    );
+    if (image == null || !mounted) return;
+
+    final uploaded = await context.read<ProfileProvider>().uploadProfileImage(
+      image,
+    );
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          uploaded ? 'Profile photo updated' : 'Could not update profile photo',
+        ),
+      ),
+    );
   }
 
   @override
@@ -66,9 +89,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 16),
                     Center(
                       child: OutlinedButton.icon(
-                        onPressed: null,
-                        icon: Icon(Icons.photo_camera_outlined),
-                        label: Text('Change photo'),
+                        onPressed: profile.isUploading ? null : _changePhoto,
+                        icon: profile.isUploading
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.photo_camera_outlined),
+                        label: Text(
+                          profile.isUploading ? 'Uploading...' : 'Change photo',
+                        ),
                       ),
                     ),
                     const SizedBox(height: 32),
@@ -122,9 +155,14 @@ class _ProfileAvatar extends StatelessWidget {
 
   final String? imageUrl;
 
-  bool get _hasUsableImage {
-    final uri = Uri.tryParse(imageUrl?.trim() ?? '');
-    return uri != null && (uri.scheme == 'http' || uri.scheme == 'https');
+  String? get _resolvedImageUrl {
+    final path = imageUrl?.trim();
+    if (path == null || path.isEmpty) return null;
+    final uri = Uri.tryParse(path);
+    if (uri != null && (uri.scheme == 'http' || uri.scheme == 'https')) {
+      return path;
+    }
+    return 'http://localhost:3000${path.startsWith('/') ? path : '/$path'}';
   }
 
   @override
@@ -136,9 +174,9 @@ class _ProfileAvatar extends StatelessWidget {
         child: SizedBox(
           width: 108,
           height: 108,
-          child: _hasUsableImage
+          child: _resolvedImageUrl != null
               ? Image.network(
-                  imageUrl!.trim(),
+                  _resolvedImageUrl!,
                   fit: BoxFit.cover,
                   errorBuilder: (_, _, _) => const _AvatarPlaceholder(),
                 )
