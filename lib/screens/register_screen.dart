@@ -123,10 +123,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         icon: Icons.email_outlined,
                         hintText: 'Enter your email',
                         controller: _emailController,
-                        validator: (value) =>
-                            value == null || value.trim().isEmpty
-                            ? 'Email is required'
-                            : null,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Email is required';
+                          }
+                          if (!value.contains("@")) {
+                            return "Enter a valid email";
+                          }
+
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 18),
                       const CustomText(
