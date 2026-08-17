@@ -2,7 +2,15 @@ import 'package:assignment_tracker/custom/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class TaskCard extends StatelessWidget {
-  const TaskCard({super.key});
+  final String taskName;
+  final int taskId;
+  final bool isCompleted;
+  const TaskCard({
+    super.key,
+    required this.taskName,
+    required this.taskId,
+    required this.isCompleted,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +26,16 @@ class TaskCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.check_circle),
+                IconButton(
+                  icon: Icon(
+                    isCompleted ? Icons.check_circle : Icons.circle_outlined,
+                  ),
+                  onPressed: () {
+                    // Handle task completion
+                  },
+                ),
                 SizedBox(width: 10),
-                CustomText(text: "Task 1"),
+                CustomText(text: taskName),
               ],
             ),
           ],
