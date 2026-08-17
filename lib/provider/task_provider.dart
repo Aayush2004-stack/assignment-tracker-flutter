@@ -21,6 +21,30 @@ class TaskProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateTask(int taskId, String title, int assignmentId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token') ?? '';
+    try {
+      await TaskService().updateTask(taskId, title, token);
+
+      await fetchTasks(assignmentId: assignmentId);
+    } catch (e) {
+      // Handle error
+    }
+  }
+
+  Future<void> deleteTask(int taskId, int assignmentId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token') ?? '';
+    try {
+      await TaskService().deleteTask(taskId, token);
+
+      await fetchTasks(assignmentId: assignmentId);
+    } catch (e) {
+      // Handle error
+    }
+  }
+
   Future<void> fetchTasks({required int assignmentId}) async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token') ?? '';

@@ -20,6 +20,36 @@ class TaskService {
     }
   }
 
+  Future<void> updateTask(int taskId, String title, String token) async {
+    final String updateUrl = '$baseUrl/$taskId';
+    final response = await http.put(
+      Uri.parse(updateUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'Bearer $token',
+      },
+      body: '{"title": "$title"}',
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update task');
+    }
+  }
+
+  Future<void> deleteTask(int taskId, String token) async {
+    final String deleteUrl = '$baseUrl/$taskId';
+    final response = await http.delete(
+      Uri.parse(deleteUrl),
+      headers: {
+        'authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete task');
+    }
+  }
+
   Future<List<TaskModel>> fetchTasks(int assignmentId, String token) async {
     final String getUrl = '$baseUrl/assignment/$assignmentId';
     final response = await http.get(
