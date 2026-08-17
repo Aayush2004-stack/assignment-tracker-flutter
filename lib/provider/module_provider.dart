@@ -28,4 +28,16 @@ class ModuleProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> addModule(String name) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    try {
+      await ModuleService().createModule(name, token!);
+      await fetchModules();
+    } catch (e) {
+      // Handle error
+    }
+  }
 }

@@ -12,6 +12,32 @@ class ModulesScreen extends StatefulWidget {
 }
 
 class _ModulesScreenState extends State<ModulesScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _moduleNameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _moduleNameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _addModule() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final moduleProvider = context.read<ModuleProvider>();
+    await moduleProvider.addModule(_moduleNameController.text.trim());
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Module added successfully')));
+
+    _moduleNameController.clear();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -43,7 +69,56 @@ class _ModulesScreenState extends State<ModulesScreen> {
                       CustomText(text: "Track your assignmenst"),
                     ],
                   ),
-                  Icon(Icons.add_circle_rounded, size: 40, color: Colors.grey),
+                  IconButton(
+                    icon: Icon(
+                      Icons.add_circle_rounded,
+                      size: 40,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Add Module'),
+                            content: Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                controller: _moduleNameController,
+                                decoration: InputDecoration(
+                                  labelText: 'Module Name',
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter a module name';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Cancel'),
+                              ),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  if (!_formKey.currentState!.validate()) {
+                                    return;
+                                  }
+                                  await _addModule();
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Add'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ],
               ),
               SizedBox(height: 20),
