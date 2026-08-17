@@ -29,6 +29,23 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
 
   int? _selectedModule;
 
+  String _progressMessage(double progress) {
+    final percentage = (progress * 100).round();
+    if (percentage >= 100) {
+      return 'Excellent work! You have completed every task for this assignment.';
+    }
+    if (percentage < 25) {
+      return 'Get started by completing your first few tasks.';
+    }
+    if (percentage < 50) {
+      return 'Nice start! Keep building momentum with the next tasks.';
+    }
+    if (percentage < 75) {
+      return 'You are over halfway there. Keep up the steady progress!';
+    }
+    return 'Almost finished! Complete the remaining tasks to wrap it up.';
+  }
+
   @override
   void dispose() {
     _taskTitleController.dispose();
@@ -352,8 +369,7 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                             ),
                             SizedBox(height: 10),
                             CustomText(
-                              text:
-                                  "You are in track with your assignment progress. Keep up the good work!",
+                              text: _progressMessage(progress),
                               fontSize: 14,
                               color: AppColors.tertiary,
                             ),
