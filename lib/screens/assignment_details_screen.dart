@@ -52,6 +52,12 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
     );
 
     if (!mounted) return;
+    final tasks = taskProvider.tasks;
+    context.read<AssignmentProvider>().updateCurrentAssignmentProgress(
+      assignmentId: widget.assignmentId,
+      totalTasks: tasks.length,
+      completedTasks: tasks.where((task) => task.isCompleted).length,
+    );
 
     ScaffoldMessenger.of(
       context,
@@ -214,6 +220,9 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                   _selectedModule!,
                 );
 
+                if (!mounted) return;
+
+                await context.read<ModuleProvider>().fetchModules();
                 if (!mounted) return;
 
                 Navigator.of(dialogContext).pop();

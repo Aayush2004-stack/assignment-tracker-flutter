@@ -48,6 +48,9 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
     );
 
     if (!mounted) return;
+    await context.read<ModuleProvider>().fetchModules();
+
+    if (!mounted) return;
 
     ScaffoldMessenger.of(
       context,

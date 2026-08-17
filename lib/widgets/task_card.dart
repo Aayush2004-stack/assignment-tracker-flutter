@@ -17,6 +17,15 @@ class TaskCard extends StatelessWidget {
     required this.assignmentId,
   });
 
+  void _syncAssignmentProgress(BuildContext context) {
+    final tasks = context.read<TaskProvider>().tasks;
+    context.read<AssignmentProvider>().updateCurrentAssignmentProgress(
+      assignmentId: assignmentId,
+      totalTasks: tasks.length,
+      completedTasks: tasks.where((task) => task.isCompleted).length,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,16 +58,7 @@ class TaskCard extends StatelessWidget {
                           taskId,
                         );
                         if (!context.mounted) return;
-                        final tasks = context.read<TaskProvider>().tasks;
-                        context
-                            .read<AssignmentProvider>()
-                            .updateCurrentAssignmentProgress(
-                              assignmentId: assignmentId,
-                              totalTasks: tasks.length,
-                              completedTasks: tasks
-                                  .where((task) => task.isCompleted)
-                                  .length,
-                            );
+                        _syncAssignmentProgress(context);
                       },
                     ),
                     SizedBox(width: 10),
@@ -152,11 +152,12 @@ class TaskCard extends StatelessWidget {
                                 ),
                                 TextButton(
                                   child: Text("Delete"),
-                                  onPressed: () {
-                                    context.read<TaskProvider>().deleteTask(
-                                      taskId,
-                                      assignmentId,
-                                    );
+                                  onPressed: () async {
+                                    await context
+                                        .read<TaskProvider>()
+                                        .deleteTask(taskId, assignmentId);
+                                    if (!context.mounted) return;
+                                    _syncAssignmentProgress(context);
                                     Navigator.of(context).pop();
                                   },
                                 ),
