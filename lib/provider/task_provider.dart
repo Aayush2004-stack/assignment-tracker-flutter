@@ -9,6 +9,18 @@ class TaskProvider extends ChangeNotifier {
 
   List<TaskModel> get tasks => _tasks;
 
+  Future<void> addTask(int assignmentId, String title) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token') ?? '';
+    try {
+      await TaskService().createTask(assignmentId, title, token);
+
+      await fetchTasks(assignmentId: assignmentId);
+    } catch (e) {
+      // Handle error
+    }
+  }
+
   Future<void> fetchTasks({required int assignmentId}) async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token') ?? '';

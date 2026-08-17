@@ -4,6 +4,22 @@ import 'package:http/http.dart' as http;
 class TaskService {
   final String baseUrl = 'http://localhost:3000/api/task';
 
+  Future<void> createTask(int assignmentId, String title, String token) async {
+    final String postUrl = '$baseUrl/add';
+    final response = await http.post(
+      Uri.parse(postUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'Bearer $token',
+      },
+      body: '{"title": "$title", "assignmentId": "$assignmentId"}',
+    );
+
+    if (response.statusCode != 201) {
+      throw Exception('Failed to create task');
+    }
+  }
+
   Future<List<TaskModel>> fetchTasks(int assignmentId, String token) async {
     final String getUrl = '$baseUrl/assignment/$assignmentId';
     final response = await http.get(
