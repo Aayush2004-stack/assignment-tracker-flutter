@@ -215,6 +215,7 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                             taskName: task.taskTitle,
                             taskId: task.taskId,
                             isCompleted: task.isCompleted,
+                            assignmentId: widget.assignmentId,
                           );
                         },
                         separatorBuilder: (context, index) =>
