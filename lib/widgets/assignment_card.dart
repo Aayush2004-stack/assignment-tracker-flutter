@@ -8,16 +8,24 @@ class AssignmentCard extends StatelessWidget {
   final String moduleName;
   final String dueDate;
   final int assignmentId;
+  final String totalTasks;
+  final String completedTasks;
   const AssignmentCard({
     super.key,
     required this.assignmentName,
     required this.moduleName,
     required this.dueDate,
     required this.assignmentId,
+    required this.totalTasks,
+    required this.completedTasks,
   });
 
   @override
   Widget build(BuildContext context) {
+    final total = int.tryParse(totalTasks) ?? 0;
+    final completed = int.tryParse(completedTasks) ?? 0;
+    final progress = total == 0 ? 0.0 : (completed / total).clamp(0.0, 1.0);
+    final percentage = (progress * 100).round();
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -81,8 +89,8 @@ class AssignmentCard extends StatelessWidget {
                     fontSize: 13,
                     color: AppColors.tertiary,
                   ),
-                  const CustomText(
-                    text: "68%",
+                  CustomText(
+                    text: "$percentage%",
                     fontSize: 13,
                     color: AppColors.primary,
                     fontWeight: FontWeight.w600,
@@ -90,7 +98,7 @@ class AssignmentCard extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 10),
-              LinearProgressIndicator(value: 0.68),
+              LinearProgressIndicator(value: progress),
               SizedBox(height: 10),
             ],
           ),

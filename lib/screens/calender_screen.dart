@@ -95,6 +95,8 @@ class _CalenderScreenState extends State<CalenderScreen> {
                             dueDate: DateFormat(
                               'dd MMM yyyy',
                             ).format(assignment.deadline),
+                            totalTasks: assignment.totalTasks,
+                            completedTasks: assignment.completedTasks,
                           );
                         },
                         separatorBuilder: (context, index) =>

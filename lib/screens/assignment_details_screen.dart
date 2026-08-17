@@ -263,6 +263,8 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
           padding: const EdgeInsets.all(16),
           child: Consumer2<AssignmentProvider, TaskProvider>(
             builder: (context, assignmentProvider, taskProvider, _) {
+              final progress = assignmentProvider.assignment?.progress ?? 0.0;
+              final percentage = (progress * 100).round();
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,11 +322,11 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                                   child: CircularProgressIndicator(
                                     strokeWidth: 10,
                                     backgroundColor: AppColors.border,
-                                    value: 0.68,
+                                    value: progress,
                                   ),
                                 ),
                                 Text(
-                                  '${((0.68) * 100).round()}%',
+                                  '$percentage%',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w700,

@@ -1,5 +1,6 @@
 import 'package:assignment_tracker/provider/task_provider.dart';
 import 'package:assignment_tracker/app/app_theme.dart';
+import 'package:assignment_tracker/provider/assignment_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,10 +44,21 @@ class TaskCard extends StatelessWidget {
                       color: isCompleted
                           ? AppColors.primary
                           : AppColors.tertiary,
-                      onPressed: () {
-                        context.read<TaskProvider>().toggleTaskCompletion(
+                      onPressed: () async {
+                        await context.read<TaskProvider>().toggleTaskCompletion(
                           taskId,
                         );
+                        if (!context.mounted) return;
+                        final tasks = context.read<TaskProvider>().tasks;
+                        context
+                            .read<AssignmentProvider>()
+                            .updateCurrentAssignmentProgress(
+                              assignmentId: assignmentId,
+                              totalTasks: tasks.length,
+                              completedTasks: tasks
+                                  .where((task) => task.isCompleted)
+                                  .length,
+                            );
                       },
                     ),
                     SizedBox(width: 10),

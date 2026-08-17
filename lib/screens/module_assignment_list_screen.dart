@@ -57,6 +57,8 @@ class ModuleAssignmentListScreen extends StatelessWidget {
                             dueDate: DateFormat(
                               'dd MMM yyyy',
                             ).format(assignment.deadline).toString(),
+                            totalTasks: assignment.totalTasks,
+                            completedTasks: assignment.completedTasks,
                           );
                         },
                       );

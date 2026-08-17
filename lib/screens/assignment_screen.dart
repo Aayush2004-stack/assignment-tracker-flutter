@@ -250,6 +250,8 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                             dueDate: DateFormat(
                               'dd MMM yyyy',
                             ).format(assignment.deadline),
+                            totalTasks: assignment.totalTasks,
+                            completedTasks: assignment.completedTasks,
                           );
                         },
                         separatorBuilder: (context, index) =>
