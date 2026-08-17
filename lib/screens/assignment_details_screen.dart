@@ -16,6 +16,35 @@ class AssignmentDetailsScreen extends StatefulWidget {
 }
 
 class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _taskTitleController = TextEditingController();
+
+  @override
+  void dispose() {
+    _taskTitleController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _addTask() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final taskProvider = context.read<TaskProvider>();
+    await taskProvider.addTask(
+      widget.assignmentId,
+      _taskTitleController.text.trim(),
+    );
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Task added successfully')));
+
+    _taskTitleController.clear();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -110,7 +139,53 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                               ),
                               SizedBox(width: 10),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text('Add Task'),
+                                        content: Form(
+                                          key: _formKey,
+                                          child: TextFormField(
+                                            controller: _taskTitleController,
+                                            decoration: InputDecoration(
+                                              labelText: 'Task Title',
+                                            ),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.trim().isEmpty) {
+                                                return 'Please enter a task title';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              if (!mounted) return;
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text('Cancel'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              if (!_formKey.currentState!
+                                                  .validate()) {
+                                                return;
+                                              }
+                                              await _addTask();
+                                              if (!mounted) return;
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text('Submit'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
                                 child: Text('Add Task'),
                               ),
                             ],
