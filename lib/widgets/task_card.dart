@@ -1,5 +1,7 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/provider/task_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TaskCard extends StatelessWidget {
   final String taskName;
@@ -31,11 +33,20 @@ class TaskCard extends StatelessWidget {
                     isCompleted ? Icons.check_circle : Icons.circle_outlined,
                   ),
                   onPressed: () {
-                    // Handle task completion
+                    context.read<TaskProvider>().toggleTaskCompletion(taskId);
                   },
                 ),
                 SizedBox(width: 10),
-                CustomText(text: taskName),
+                Text(
+                  taskName,
+                  style: TextStyle(
+                    fontSize: 16,
+
+                    decoration: isCompleted
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                  ),
+                ),
               ],
             ),
           ],
