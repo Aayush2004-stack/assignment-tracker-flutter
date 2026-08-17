@@ -18,6 +18,31 @@ class AssignmentProvider extends ChangeNotifier {
 
   bool isLoading = false;
 
+  Future<void> addAssignment(
+    String title,
+    String details,
+    String givenDate,
+    String dueDate,
+    int moduleId,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token') ?? '';
+    try {
+      await AssignmentService().createAssignment(
+        title,
+        details,
+        givenDate,
+        dueDate,
+        moduleId,
+        token,
+      );
+
+      await fetchAssignments();
+    } catch (e) {
+      // Handle error
+    }
+  }
+
   Future<void> fetchModuleAssignments(int moduleId) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
