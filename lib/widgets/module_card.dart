@@ -8,7 +8,7 @@ class ModuleCard extends StatelessWidget {
   final int moduleId;
   const ModuleCard({
     super.key,
-  
+
     required this.moduleName,
     required this.pendingAssignments,
     required this.moduleId,
@@ -19,7 +19,13 @@ class ModuleCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Navigate to the module assignment list screen
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ModuleAssignmentListScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                ModuleAssignmentListScreen(moduleId: moduleId, moduleName: moduleName),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
