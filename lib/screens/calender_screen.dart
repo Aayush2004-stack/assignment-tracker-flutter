@@ -1,4 +1,5 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/app/app_theme.dart';
 import 'package:assignment_tracker/provider/assignment_provider.dart';
 import 'package:assignment_tracker/widgets/assignment_card.dart';
 import 'package:flutter/material.dart';
@@ -44,13 +45,22 @@ class _CalenderScreenState extends State<CalenderScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomText(text: DateFormat('MMMM').format(selectedDate)),
+                      CustomText(
+                        text: DateFormat('MMMM').format(selectedDate),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                      ),
                       CustomText(
                         text: DateFormat('EEEE,  d').format(selectedDate),
+                        fontSize: 14,
+                        color: AppColors.tertiary,
                       ),
                     ],
                   ),
-                  Icon(Icons.calendar_month_outlined),
+                  const Icon(
+                    Icons.calendar_month_outlined,
+                    color: AppColors.primary,
+                  ),
                 ],
               ),
               SizedBox(height: 20),
@@ -60,6 +70,8 @@ class _CalenderScreenState extends State<CalenderScreen> {
                 text: DateTime.now().day == selectedDate.day
                     ? "Today's Assignments"
                     : "Assignments on ${DateFormat('EEEE, d').format(selectedDate)}",
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
               ),
 
               SizedBox(height: 20),
@@ -104,11 +116,11 @@ class _CalenderScreenState extends State<CalenderScreen> {
       padding: const EdgeInsets.all(5),
 
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
 
         borderRadius: BorderRadius.circular(16),
 
-        border: Border.all(color: const Color.fromARGB(93, 72, 71, 71)),
+        border: Border.all(color: AppColors.border, width: 1.25),
       ),
 
       child: Row(
@@ -141,9 +153,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
         height: 76,
 
         decoration: BoxDecoration(
-          color: isSelected
-              ? const Color.fromARGB(142, 0, 0, 0)
-              : Colors.transparent,
+          color: isSelected ? AppColors.primary : Colors.transparent,
 
           borderRadius: BorderRadius.circular(12),
         ),
@@ -160,7 +170,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
 
                 fontWeight: FontWeight.w600,
 
-                color: isSelected ? Colors.white : Colors.grey.shade700,
+                color: isSelected ? Colors.white : AppColors.tertiary,
               ),
             ),
 
@@ -174,7 +184,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
 
                 fontWeight: FontWeight.w600,
 
-                color: isSelected ? Colors.white : Colors.grey.shade800,
+                color: isSelected ? Colors.white : AppColors.neutral,
               ),
             ),
           ],

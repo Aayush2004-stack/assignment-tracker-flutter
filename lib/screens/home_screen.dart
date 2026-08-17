@@ -1,4 +1,5 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/app/app_theme.dart';
 import 'package:assignment_tracker/provider/assignment_provider.dart';
 import 'package:assignment_tracker/widgets/assignment_card.dart';
 import 'package:assignment_tracker/widgets/assignment_summary_card.dart';
@@ -33,26 +34,39 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomText(text: "Good evening, Machoos"),
+              const CustomText(
+                text: "Good evening, Machoos",
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+              ),
               SizedBox(height: 30),
               AssignmentSummaryCard(
                 title: "Due today",
                 summaryNumber: "5",
-                cardColor: const Color.fromARGB(62, 33, 149, 243),
+                cardColor: AppColors.secondary,
               ),
               SizedBox(height: 20),
               AssignmentSummaryCard(
                 title: "Due in this week",
                 summaryNumber: "10",
-                cardColor: const Color.fromARGB(61, 243, 149, 33),
+                cardColor: const Color(0xFFE9E7F6),
               ),
               SizedBox(height: 30),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomText(text: "Upcoming"),
-                  CustomText(text: "View all", fontSize: 16),
+                  const CustomText(
+                    text: "Upcoming",
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  const CustomText(
+                    text: "View all",
+                    fontSize: 14,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ],
               ),
               SizedBox(height: 15),

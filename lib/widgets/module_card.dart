@@ -1,4 +1,5 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/app/app_theme.dart';
 import 'package:assignment_tracker/screens/module_assignment_list_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -22,14 +23,17 @@ class ModuleCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                ModuleAssignmentListScreen(moduleId: moduleId, moduleName: moduleName),
+            builder: (context) => ModuleAssignmentListScreen(
+              moduleId: moduleId,
+              moduleName: moduleName,
+            ),
           ),
         );
       },
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(width: 1),
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.border, width: 1.25),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Padding(
@@ -39,15 +43,24 @@ class ModuleCard extends StatelessWidget {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Icon(Icons.book), Icon(Icons.more_vert)],
+                children: const [
+                  Icon(Icons.book_outlined, color: AppColors.primary),
+                  Icon(Icons.more_vert, color: AppColors.tertiary),
+                ],
               ),
               SizedBox(height: 20),
-              CustomText(text: moduleName),
+              CustomText(
+                text: moduleName,
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+              ),
               SizedBox(height: 5),
               CustomText(
                 text: int.tryParse(pendingAssignments)! > 1
                     ? "$pendingAssignments Assignments pending"
                     : "$pendingAssignments Assignment pending",
+                fontSize: 14,
+                color: AppColors.tertiary,
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:assignment_tracker/provider/task_provider.dart';
+import 'package:assignment_tracker/app/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +20,8 @@ class TaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(width: 1),
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.border, width: 1.25),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
@@ -38,6 +40,9 @@ class TaskCard extends StatelessWidget {
                             ? Icons.check_circle
                             : Icons.circle_outlined,
                       ),
+                      color: isCompleted
+                          ? AppColors.primary
+                          : AppColors.tertiary,
                       onPressed: () {
                         context.read<TaskProvider>().toggleTaskCompletion(
                           taskId,
@@ -49,6 +54,10 @@ class TaskCard extends StatelessWidget {
                       taskName,
                       style: TextStyle(
                         fontSize: 16,
+                        color: isCompleted
+                            ? AppColors.tertiary
+                            : AppColors.neutral,
+                        fontWeight: FontWeight.w500,
 
                         decoration: isCompleted
                             ? TextDecoration.lineThrough
@@ -62,7 +71,10 @@ class TaskCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.edit),
+                      icon: const Icon(
+                        Icons.edit_outlined,
+                        color: AppColors.primary,
+                      ),
                       onPressed: () {
                         showDialog(
                           context: context,
@@ -106,7 +118,10 @@ class TaskCard extends StatelessWidget {
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(
+                        Icons.delete_outline,
+                        color: AppColors.tertiary,
+                      ),
                       onPressed: () {
                         showDialog(
                           context: context,

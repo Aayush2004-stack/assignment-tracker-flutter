@@ -1,4 +1,5 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/app/app_theme.dart';
 import 'package:assignment_tracker/screens/assignment_details_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,8 @@ class AssignmentCard extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(width: 1),
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.border, width: 1.25),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Padding(
@@ -40,23 +42,51 @@ class AssignmentCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomText(text: assignmentName),
+                  Expanded(
+                    child: CustomText(
+                      text: assignmentName,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   Row(
                     children: [
-                      Icon(Icons.calendar_month),
-                      CustomText(text: dueDate, fontSize: 16),
+                      const Icon(
+                        Icons.calendar_month_outlined,
+                        size: 18,
+                        color: AppColors.tertiary,
+                      ),
+                      const SizedBox(width: 4),
+                      CustomText(
+                        text: dueDate,
+                        fontSize: 13,
+                        color: AppColors.tertiary,
+                      ),
                     ],
                   ),
                 ],
               ),
               SizedBox(height: 10),
-              CustomText(text: moduleName),
+              CustomText(
+                text: moduleName,
+                fontSize: 14,
+                color: AppColors.tertiary,
+              ),
               SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomText(text: "Progress"),
-                  CustomText(text: "68%"),
+                  const CustomText(
+                    text: "Progress",
+                    fontSize: 13,
+                    color: AppColors.tertiary,
+                  ),
+                  const CustomText(
+                    text: "68%",
+                    fontSize: 13,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ],
               ),
               SizedBox(height: 10),

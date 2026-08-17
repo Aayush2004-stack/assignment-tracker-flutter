@@ -1,5 +1,6 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
 import 'package:assignment_tracker/custom/custom_text_form_field.dart';
+import 'package:assignment_tracker/app/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:assignment_tracker/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -65,9 +66,18 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CustomText(text: "Track Assignments"),
+              const CustomText(
+                text: "Track Assignments",
+                fontSize: 28,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primary,
+              ),
               SizedBox(height: 20),
-              CustomText(text: "Welcome back"),
+              const CustomText(
+                text: "Welcome back",
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
               SizedBox(height: 10),
               CustomText(
                 text: "Please enter your details to sign in.",
@@ -76,7 +86,8 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 25),
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(width: 1),
+                  color: AppColors.surface,
+                  border: Border.all(color: AppColors.border, width: 1.25),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
@@ -84,7 +95,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomText(text: "Email", fontSize: 18),
+                      const CustomText(
+                        text: "Email",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                       SizedBox(height: 10),
                       CustomTextFormField(
                         icon: Icons.email,
@@ -100,7 +115,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 20),
 
-                      CustomText(text: "Password", fontSize: 18),
+                      const CustomText(
+                        text: "Password",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                       SizedBox(height: 10),
                       CustomTextFormField(
                         icon: Icons.visibility_off,
@@ -130,7 +149,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.white,
                                 ),
                               )
-                            : CustomText(text: "Login"),
+                            : const CustomText(
+                                text: "Login",
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
                       ),
                       SizedBox(height: 30),
                     ],
@@ -141,9 +164,18 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomText(text: "Don't have an account?", fontSize: 16),
+                  const CustomText(
+                    text: "Don't have an account?",
+                    fontSize: 14,
+                    color: AppColors.tertiary,
+                  ),
                   SizedBox(width: 10),
-                  CustomText(text: "Create account", fontSize: 18),
+                  const CustomText(
+                    text: "Create account",
+                    fontSize: 14,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ],
               ),
             ],

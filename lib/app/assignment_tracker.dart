@@ -1,4 +1,5 @@
 import 'package:assignment_tracker/auth/auth_gate.dart';
+import 'package:assignment_tracker/app/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class AssignmentTracker extends StatelessWidget {
@@ -9,7 +10,8 @@ class AssignmentTracker extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Assignment Tracker',
-      home: AuthGate(),
+      theme: AppTheme.light,
+      home: const AuthGate(),
     );
   }
 }

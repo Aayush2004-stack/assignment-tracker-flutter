@@ -1,4 +1,5 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/app/app_theme.dart';
 import 'package:assignment_tracker/provider/assignment_provider.dart';
 import 'package:assignment_tracker/provider/module_provider.dart';
 import 'package:assignment_tracker/widgets/assignment_card.dart';
@@ -86,16 +87,24 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomText(text: "Your Assignmnets"),
+                      const CustomText(
+                        text: "Your Assignmnets",
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                      ),
                       SizedBox(height: 1),
-                      CustomText(text: "Track your progress"),
+                      const CustomText(
+                        text: "Track your progress",
+                        fontSize: 14,
+                        color: AppColors.tertiary,
+                      ),
                     ],
                   ),
                   IconButton(
                     icon: Icon(
                       Icons.add_circle_rounded,
                       size: 40,
-                      color: Colors.grey,
+                      color: AppColors.primary,
                     ),
                     onPressed: () {
                       showDialog(
@@ -121,6 +130,7 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                                         return null;
                                       },
                                     ),
+                                    const SizedBox(height: 12),
                                     TextFormField(
                                       controller: _taskDetailController,
                                       decoration: InputDecoration(
@@ -133,6 +143,7 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                                         return null;
                                       },
                                     ),
+                                    const SizedBox(height: 12),
                                     TextFormField(
                                       controller: _givenDateController,
                                       decoration: InputDecoration(
@@ -149,6 +160,7 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                                         return null;
                                       },
                                     ),
+                                    const SizedBox(height: 12),
                                     TextFormField(
                                       controller: _dueDateController,
                                       decoration: InputDecoration(
@@ -165,6 +177,7 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                                         return null;
                                       },
                                     ),
+                                    const SizedBox(height: 12),
                                     DropdownButtonFormField(
                                       hint: Text("Select a module"),
                                       items: moduleProvider.modules.map((

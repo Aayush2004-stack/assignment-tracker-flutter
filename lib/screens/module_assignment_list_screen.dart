@@ -1,4 +1,5 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/app/app_theme.dart';
 import 'package:assignment_tracker/provider/assignment_provider.dart';
 import 'package:assignment_tracker/widgets/assignment_card.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,12 @@ class ModuleAssignmentListScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomText(text: "Assignments for module: $moduleName"),
+              CustomText(
+                text: "Assignments for module: $moduleName",
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: AppColors.neutral,
+              ),
               SizedBox(height: 20),
 
               Expanded(

@@ -1,4 +1,5 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/app/app_theme.dart';
 import 'package:assignment_tracker/provider/assignment_provider.dart';
 import 'package:assignment_tracker/provider/module_provider.dart';
 import 'package:assignment_tracker/provider/task_provider.dart';
@@ -101,6 +102,7 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 12),
                   TextFormField(
                     controller: _detailsController,
                     decoration: const InputDecoration(labelText: 'Details'),
@@ -113,6 +115,7 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 12),
                   TextFormField(
                     controller: _givenDateController,
                     decoration: const InputDecoration(
@@ -132,7 +135,7 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                       return null;
                     },
                   ),
-
+                  const SizedBox(height: 12),
                   TextFormField(
                     controller: _dueDateController,
                     decoration: const InputDecoration(
@@ -152,6 +155,7 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 12),
                   Consumer<ModuleProvider>(
                     builder: (context, moduleProvider, _) {
                       return DropdownButtonFormField<int>(
@@ -266,28 +270,39 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                     CustomText(
                       text:
                           "Module: ${assignmentProvider.assignment?.moduleName ?? 'Loading...'}",
+                      fontSize: 14,
+                      color: AppColors.tertiary,
                     ),
                     SizedBox(height: 10),
                     CustomText(
                       text:
                           assignmentProvider.assignment?.title ?? 'Loading...',
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
                     ),
                     SizedBox(height: 20),
                     CustomText(
                       text:
                           "Description: ${assignmentProvider.assignment?.details ?? 'Loading...'}",
+                      fontSize: 16,
                     ),
                     SizedBox(height: 20),
                     CustomText(
                       text:
                           "Deadline: ${DateFormat('dd MMM yyyy').format(assignmentProvider.assignment?.deadline ?? DateTime.now())}",
+                      fontSize: 14,
+                      color: AppColors.tertiary,
                     ),
                     SizedBox(height: 20),
                     Container(
                       alignment: Alignment.center,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        border: Border.all(width: 1),
+                        color: AppColors.secondary,
+                        border: Border.all(
+                          color: AppColors.border,
+                          width: 1.25,
+                        ),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Padding(
@@ -304,19 +319,32 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                                   height: 60,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 10,
-                                    backgroundColor: Colors.grey[300],
+                                    backgroundColor: AppColors.border,
                                     value: 0.68,
                                   ),
                                 ),
-                                Text('${((0.68) * 100).round()}%'),
+                                Text(
+                                  '${((0.68) * 100).round()}%',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
                               ],
                             ),
                             SizedBox(height: 10),
-                            CustomText(text: "Overall Progress"),
+                            const CustomText(
+                              text: "Overall Progress",
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                            ),
                             SizedBox(height: 10),
                             CustomText(
                               text:
                                   "You are in track with your assignment progress. Keep up the good work!",
+                              fontSize: 14,
+                              color: AppColors.tertiary,
                             ),
                             SizedBox(height: 20),
                             Row(
@@ -385,7 +413,11 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    CustomText(text: "Tasks"),
+                    const CustomText(
+                      text: "Tasks",
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
                     SizedBox(height: 10),
                     if (taskProvider.isLoading)
                       Center(child: CircularProgressIndicator())

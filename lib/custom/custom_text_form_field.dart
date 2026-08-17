@@ -22,8 +22,7 @@ class CustomTextFormField extends StatelessWidget {
       controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        hint: Text(hintText, style: TextStyle(fontSize: 16)),
+        hintText: hintText,
         suffixIcon: Icon(icon, size: 20),
       ),
     );
