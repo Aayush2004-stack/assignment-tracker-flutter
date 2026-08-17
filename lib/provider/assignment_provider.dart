@@ -7,12 +7,60 @@ class AssignmentProvider extends ChangeNotifier {
   final List<AssignmentModel> _assignments = [];
   final List<AssignmentModel> _upcomingAssignments = [];
   final List<AssignmentModel> _selectedDateAssignments = [];
+  final List<AssignmentModel> _moduleAssignments = [];
+  AssignmentModel? _assignment;
 
   List<AssignmentModel> get assignments => _assignments;
   List<AssignmentModel> get upcomingAssignments => _upcomingAssignments;
   List<AssignmentModel> get selectedDateAssignments => _selectedDateAssignments;
+  List<AssignmentModel> get moduleAssignments => _moduleAssignments;
+  AssignmentModel? get assignment => _assignment;
 
   bool isLoading = false;
+
+  Future<void> fetchModuleAssignments(int moduleId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final remoteAssignments = await AssignmentService().getAssignmentsOfModule(moduleId,
+        token!,
+      );
+      _moduleAssignments.clear();
+      _moduleAssignments.addAll(remoteAssignments);
+        
+      
+    } catch (e) {
+      // Handle error
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchAssignmentDetails(int assignmentId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final assignmentDetails = await AssignmentService().getAssignmentDetails(
+        assignmentId,
+        token!,
+      );
+      _assignment = assignmentDetails;
+    } catch (e) {
+      // Handle error
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> fetchAssignments() async {
     final prefs = await SharedPreferences.getInstance();
@@ -43,7 +91,7 @@ class AssignmentProvider extends ChangeNotifier {
       _assignments
           .where((assignment) => assignment.deadline.isAfter(now))
           .toList()
-          .take(1),
+          .take(2),
     );
   }
 
@@ -60,10 +108,12 @@ class AssignmentProvider extends ChangeNotifier {
       );
       _selectedDateAssignments.clear();
       _selectedDateAssignments.addAll(
-        remoteAssignments.where((assignment) =>
-            assignment.deadline.year == selectedDate.year &&
-            assignment.deadline.month == selectedDate.month &&
-            assignment.deadline.day == selectedDate.day),
+        remoteAssignments.where(
+          (assignment) =>
+              assignment.deadline.year == selectedDate.year &&
+              assignment.deadline.month == selectedDate.month &&
+              assignment.deadline.day == selectedDate.day,
+        ),
       );
     } catch (e) {
       // Handle error
