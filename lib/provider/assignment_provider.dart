@@ -6,12 +6,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AssignmentProvider extends ChangeNotifier {
   final List<AssignmentModel> _assignments = [];
   final List<AssignmentModel> _upcomingAssignments = [];
+  final List<AssignmentModel> _dueTodayAssignments = [];
+  final List<AssignmentModel> _dueThisWeekAssignments = [];
   final List<AssignmentModel> _selectedDateAssignments = [];
   final List<AssignmentModel> _moduleAssignments = [];
   AssignmentModel? _assignment;
 
   List<AssignmentModel> get assignments => _assignments;
   List<AssignmentModel> get upcomingAssignments => _upcomingAssignments;
+  List<AssignmentModel> get dueTodayAssignments => _dueTodayAssignments;
+  List<AssignmentModel> get dueThisWeekAssignments => _dueThisWeekAssignments;
   List<AssignmentModel> get selectedDateAssignments => _selectedDateAssignments;
   List<AssignmentModel> get moduleAssignments => _moduleAssignments;
   AssignmentModel? get assignment => _assignment;
@@ -78,13 +82,10 @@ class AssignmentProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final remoteAssignments = await AssignmentService().getAssignmentsOfModule(moduleId,
-        token!,
-      );
+      final remoteAssignments = await AssignmentService()
+          .getAssignmentsOfModule(moduleId, token!);
       _moduleAssignments.clear();
       _moduleAssignments.addAll(remoteAssignments);
-        
-      
     } catch (e) {
       // Handle error
     } finally {
@@ -138,13 +139,73 @@ class AssignmentProvider extends ChangeNotifier {
 
   void getUpcomingAssignments() {
     final now = DateTime.now();
-    _upcomingAssignments.clear();
-    _upcomingAssignments.addAll(
-      _assignments
-          .where((assignment) => assignment.deadline.isAfter(now))
-          .toList()
-          .take(2),
+    final startOfToday = DateTime(now.year, now.month, now.day);
+    final endOfWeek = startOfToday.add(
+      Duration(days: 6 - startOfToday.weekday),
     );
+    final startOfNextDay = startOfToday.add(const Duration(days: 1));
+
+    _dueTodayAssignments
+      ..clear()
+      ..addAll(
+        _assignments.where(
+          (assignment) => _isSameDate(assignment.deadline, startOfToday),
+        ),
+      );
+    _dueThisWeekAssignments
+      ..clear()
+      ..addAll(
+        _assignments.where(
+          (assignment) =>
+              !assignment.deadline.isBefore(startOfToday) &&
+              assignment.deadline.isBefore(
+                endOfWeek.add(const Duration(days: 1)),
+              ),
+        ),
+      );
+    final upcoming =
+        _assignments
+            .where(
+              (assignment) => !assignment.deadline.isBefore(startOfNextDay),
+            )
+            .toList()
+          ..sort((first, second) => first.deadline.compareTo(second.deadline));
+    _upcomingAssignments
+      ..clear()
+      ..addAll(upcoming.take(2));
+  }
+
+  void updateCurrentAssignmentProgress({
+    required int assignmentId,
+    required int totalTasks,
+    required int completedTasks,
+  }) {
+    void update(List<AssignmentModel> items) {
+      for (final item in items) {
+        if (item.assignmentId == assignmentId) {
+          item.totalTasks = totalTasks.toString();
+          item.completedTasks = completedTasks.toString();
+        }
+      }
+    }
+
+    if (_assignment?.assignmentId == assignmentId) {
+      _assignment!.totalTasks = totalTasks.toString();
+      _assignment!.completedTasks = completedTasks.toString();
+    }
+    update(_assignments);
+    update(_upcomingAssignments);
+    update(_dueTodayAssignments);
+    update(_dueThisWeekAssignments);
+    update(_selectedDateAssignments);
+    update(_moduleAssignments);
+    notifyListeners();
+  }
+
+  bool _isSameDate(DateTime first, DateTime second) {
+    return first.year == second.year &&
+        first.month == second.month &&
+        first.day == second.day;
   }
 
   Future<void> getAssignmentsByDate(DateTime selectedDate) async {

@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     Future.microtask(() {
       if (!mounted) return;
-      context.read<AssignmentProvider>().getUpcomingAssignments();
+      context.read<AssignmentProvider>().fetchAssignments();
     });
   }
 
@@ -42,13 +42,14 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 30),
               AssignmentSummaryCard(
                 title: "Due today",
-                summaryNumber: "5",
+                summaryNumber: provider.dueTodayAssignments.length.toString(),
                 cardColor: AppColors.secondary,
               ),
               SizedBox(height: 20),
               AssignmentSummaryCard(
                 title: "Due in this week",
-                summaryNumber: "10",
+                summaryNumber: provider.dueThisWeekAssignments.length
+                    .toString(),
                 cardColor: const Color(0xFFE9E7F6),
               ),
               SizedBox(height: 30),
@@ -88,6 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             dueDate: DateFormat(
                               'dd MMM yyyy',
                             ).format(assignment.deadline),
+                            totalTasks: assignment.totalTasks,
+                            completedTasks: assignment.completedTasks,
                           );
                         },
                         separatorBuilder: (context, index) =>
