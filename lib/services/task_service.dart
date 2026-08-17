@@ -1,0 +1,24 @@
+import 'package:assignment_tracker/model/task_model.dart';
+import 'package:http/http.dart' as http;
+
+class TaskService {
+  final String baseUrl = 'http://localhost:3000/api/task/';
+
+  Future<List<TaskModel>> fetchTasks(int assignmentId, String token) async {
+    final String getUrl = '$baseUrl/assignment/$assignmentId';
+    final response = await http.get(
+      Uri.parse(getUrl),
+      headers: {
+        'authorization': 'Bearer $token', //
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return taskModelFromJson(response.body);
+    } else {
+      throw Exception('Failed to load tasks');
+    }
+  }
+
+  
+}
