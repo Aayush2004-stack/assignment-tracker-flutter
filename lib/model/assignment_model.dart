@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 List<AssignmentModel> assignmentModelFromJson(String str) =>
@@ -19,6 +18,14 @@ class AssignmentModel {
   DateTime deadline;
   DateTime createdAt;
   DateTime updatedAt;
+  String totalTasks;
+  String completedTasks;
+
+  int get totalTasksCount => int.tryParse(totalTasks) ?? 0;
+  int get completedTasksCount => int.tryParse(completedTasks) ?? 0;
+  double get progress => totalTasksCount == 0
+      ? 0
+      : (completedTasksCount / totalTasksCount).clamp(0.0, 1.0);
 
   AssignmentModel({
     required this.moduleId,
@@ -30,6 +37,8 @@ class AssignmentModel {
     required this.deadline,
     required this.createdAt,
     required this.updatedAt,
+    required this.totalTasks,
+    required this.completedTasks,
   });
 
   factory AssignmentModel.fromJson(Map<String, dynamic> json) =>
@@ -43,6 +52,8 @@ class AssignmentModel {
         deadline: DateTime.parse(json["deadline"]),
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        totalTasks: json["total_tasks"]?.toString() ?? '0',
+        completedTasks: json["completed_tasks"]?.toString() ?? '0',
       );
 
   Map<String, dynamic> toJson() => {
