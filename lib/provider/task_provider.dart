@@ -26,4 +26,20 @@ class TaskProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> toggleTaskCompletion(int taskId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token') ?? '';
+    try {
+      await TaskService().toggleTaskCompletion(taskId, token);
+      // Update the local task list
+      final index = _tasks.indexWhere((task) => task.taskId == taskId);
+      if (index != -1) {
+        _tasks[index].isCompleted = !_tasks[index].isCompleted;
+        notifyListeners();
+      }
+    } catch (e) {
+      // Handle error
+    }
+  }
 }
