@@ -1,6 +1,7 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
 import 'package:assignment_tracker/custom/custom_text_form_field.dart';
 import 'package:assignment_tracker/app/app_theme.dart';
+import 'package:assignment_tracker/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:assignment_tracker/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -170,11 +171,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: AppColors.tertiary,
                   ),
                   SizedBox(width: 10),
-                  const CustomText(
-                    text: "Create account",
-                    fontSize: 14,
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w600,
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const RegisterScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text('Create account'),
                   ),
                 ],
               ),
