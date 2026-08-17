@@ -1,6 +1,8 @@
 import 'package:assignment_tracker/custom/custom_text.dart';
+import 'package:assignment_tracker/provider/task_provider.dart';
 import 'package:assignment_tracker/widgets/task_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AssignmentDetailsScreen extends StatefulWidget {
   final int assignmentId;
@@ -12,6 +14,18 @@ class AssignmentDetailsScreen extends StatefulWidget {
 }
 
 class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      if (!mounted) return;
+      context.read<TaskProvider>().fetchTasks(
+        assignmentId: widget.assignmentId,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,11 +103,31 @@ class _AssignmentDetailsScreenState extends State<AssignmentDetailsScreen> {
               SizedBox(height: 20),
               CustomText(text: "Tasks"),
               SizedBox(height: 10),
-              TaskCard(),
-              SizedBox(height: 10),
-              TaskCard(),
-              SizedBox(height: 10),
-              TaskCard(),
+              Consumer<TaskProvider>(
+                builder: (context, provider, _) {
+                  if (provider.isLoading) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (provider.tasks.isEmpty) {
+                    return Center(child: Text("No tasks available"));
+                  } else {
+                    return Expanded(
+                      child: ListView.separated(
+                        itemCount: provider.tasks.length,
+                        itemBuilder: (context, index) {
+                          final task = provider.tasks[index];
+                          return TaskCard(
+                            taskName: task.taskTitle,
+                            taskId: task.taskId,
+                            isCompleted: task.isCompleted,
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 10),
+                      ),
+                    );
+                  }
+                },
+              ),
             ],
           ),
         ),
