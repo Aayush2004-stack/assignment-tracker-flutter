@@ -50,3 +50,85 @@ lib/
 ├── screens/            # UI screens
 ├── services/           # API service layer
 └── widgets/            # Reusable UI components (cards, etc.)
+```
+
+---
+
+## 🔌 Backend Requirement
+
+This app expects a backend running locally at:
+
+- `http://localhost:3000`
+
+Used API routes include:
+
+- `/api/auth/*`
+- `/api/module/*`
+- `/api/assignment/*`
+- `/api/task/*`
+- `/api/images/profile-image`
+
+> If running on an Android emulator, `localhost` usually needs to be replaced with `10.0.2.2`.
+
+---
+
+## ✅ Prerequisites
+
+- Flutter SDK installed
+- Dart SDK compatible with the project
+- A running backend API server on port `3000`
+
+---
+
+## 🚀 Getting Started
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Aayush2004-stack/assignment-tracker-flutter.git
+   cd assignment-tracker-flutter
+   ```
+
+2. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
+
+3. **Run the app**
+   ```bash
+   flutter run
+   ```
+
+---
+
+## 🧪 Useful Commands
+
+- Analyze code:
+  ```bash
+  flutter analyze
+  ```
+- Run tests:
+  ```bash
+  flutter test
+  ```
+
+---
+
+## 🔐 Authentication Behavior
+
+- JWT token is saved using `shared_preferences`
+- App startup checks token presence and expiry (`jwt_decoder`)
+- Expired/invalid token routes users back to login
+
+---
+
+## 📌 Notes
+
+- Date input format used in forms: `YYYY-MM-DD`
+- Assignment progress is derived from completed tasks vs total tasks
+- Profile image upload is supported via multipart request
+
+---
+
+## 👤 Author
+
+**Aayush2004-stack**
